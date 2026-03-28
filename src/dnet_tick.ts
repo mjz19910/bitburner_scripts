@@ -79,7 +79,7 @@ async function runTick(ns: NS) {
 		ns.print(`[tick] sent task ${task.taskId} target=${task.target}`);
 	}
 
-	ns.print(`[tick] completed tick at ${getOrchTimestamp(ns)}ms`);
+	ns.print(`[tick] completed tick`);
 }
 
 /** Build topology from edgeReports */
