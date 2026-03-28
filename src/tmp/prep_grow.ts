@@ -1,0 +1,1 @@
+export const main = (ns: NS) => ns.grow(ns.args[0] as string)

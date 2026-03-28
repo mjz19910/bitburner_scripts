@@ -1,0 +1,1 @@
+export const main = (ns: NS) => ns.weaken(ns.args[0] as string)

@@ -1,0 +1,26 @@
+{
+  "runners": [
+    {
+      "target": "the-hub",
+      "hackPct": 0.05,
+      "threads": {
+        "h": 1,
+        "g": 1,
+        "w1": 1,
+        "w2": 1
+      }
+    },
+    {
+      "target": "foodnstuff",
+      "hackPct": 0.05,
+      "threads": {
+        "h": 1,
+        "g": 1,
+        "w1": 1,
+        "w2": 1
+      }
+    }
+  ],
+  "updatedAt": 1774501474789,
+  "nextScriptId": 2584
+}
