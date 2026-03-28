@@ -1,5 +1,6 @@
-import { read_string_arg, read_number_arg } from "types/arg_parse"
-import { exec } from "types/api/exec"
+import { read_string_arg, read_number_arg } from "@/arg_parse"
+import { exec } from "@/exec"
+import { AutocompleteData, NS, ScriptArg } from "@ns"
 export function main(ns: NS) {
 	if (ns.args.length < 3) {
 		ns.tprint("too few arguments")
