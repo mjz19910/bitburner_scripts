@@ -7,7 +7,7 @@
  */
 
 import { ExpansionCandidate } from "./types"
-import { PLAN_FILE, WORKER_SCRIPT, HOME_HOST } from "./constants"
+import { PLAN_FILE, WORKER_SCRIPT, HOME_HOST } from "./dnet_config"
 
 export async function main(ns: NS) {
 	if (ns.getHostname() !== HOME_HOST) {

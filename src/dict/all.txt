@@ -3,12 +3,15 @@ avmnite-02h
 clarkinc
 CompuTek
 CSec
+Darkscape
 darkweb
 deltaone
+dnet
 foodnstuff
 ftpcrack
 fulcrumassets
 fulcrumtech
+heartbleed
 httpworm
 joesguns
 lexo-corp
@@ -21,6 +24,7 @@ omnia
 omnitek
 relaysmtp
 run4theh111z
+sessioned
 syscore
 tprint
 viteburner

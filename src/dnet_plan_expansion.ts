@@ -1,4 +1,5 @@
-import { Topology, ExpansionCandidate } from "./types"
+import { NS } from "@ns"
+import { Topology, ExpansionCandidate } from "./dnet_types"
 
 const TOPOLOGY_FILE = "/tmp/darknet_topology.json"
 const PLAN_FILE = "/tmp/darknet_expansion_plan.json"

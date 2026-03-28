@@ -7,14 +7,15 @@
  * - Starts initial worker(s)
  */
 
-import { WORKER_SCRIPT, TAIL_SCRIPT, ORCHESTRATOR_SCRIPT } from "./constants";
+import { ORCHESTRATOR_SCRIPT, TAIL_SCRIPT, WORKER_SCRIPT } from "@/dnet_config";
+import { NS } from "@ns";
 
 export async function main(ns: NS) {
     ns.disableLog("ALL");
     const host = ns.getHostname();
     ns.tprint(`[darknet_main] starting darknet system on ${host}`);
 
-    // --- 1️⃣ Start tail aggregator ---
+    // 1. Start tail aggregator
     if (!ns.fileExists(TAIL_SCRIPT, host)) {
         ns.tprint(`[darknet_main] missing ${TAIL_SCRIPT}`);
         return;
@@ -28,7 +29,7 @@ export async function main(ns: NS) {
 
     await ns.sleep(200); // give tail time to start
 
-    // --- 2️⃣ Start orchestrator ---
+    // 2. Start orchestrator
     if (!ns.fileExists(ORCHESTRATOR_SCRIPT, host)) {
         ns.tprint(`[darknet_main] missing ${ORCHESTRATOR_SCRIPT}`);
         return;
@@ -42,7 +43,7 @@ export async function main(ns: NS) {
 
     await ns.sleep(200); // give orchestrator time to initialize
 
-    // --- 3️⃣ Start initial worker(s) on home ---
+    // 3. Start initial worker(s) on home ---
     if (!ns.fileExists(WORKER_SCRIPT, host)) {
         ns.tprint(`[darknet_main] missing ${WORKER_SCRIPT}`);
         return;
@@ -50,7 +51,7 @@ export async function main(ns: NS) {
 
     const initialWorkers = 1; // number of workers to start initially
     for (let i = 0; i < initialWorkers; i++) {
-        const pid = ns.exec(WORKER_SCRIPT, host, 1);
+        const pid = ns.exec(WORKER_SCRIPT, "darkweb", 1);
         if (pid <= 0) {
             ns.tprint(`[darknet_main] failed to start worker #${i + 1}`);
         } else {

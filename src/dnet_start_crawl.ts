@@ -1,12 +1,6 @@
-const WORKER_SCRIPT = "darknet_probe_worker.ts"
-const ORCHESTRATOR_PORT = 5
-
-type SeedReport = {
-	source: string
-	target: string
-	authInfo: unknown
-	timestamp: number
-}
+import { NS } from "@ns"
+import { SeedReport } from "./dnet_types"
+import { ORCHESTRATOR_PORT, WORKER_SCRIPT } from "./dnet_config"
 
 export async function main(ns: NS) {
 	const seeds = ns.args.length > 0

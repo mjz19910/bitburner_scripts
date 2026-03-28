@@ -6,7 +6,7 @@
  * and which require multi-hop authentication.
  */
 import { Topology, AuthCandidate } from "./types"
-import { TOPOLOGY_FILE, AUTH_PLAN_FILE, HOME_HOST } from "./constants"
+import { TOPOLOGY_FILE, AUTH_PLAN_FILE, HOME_HOST } from "./dnet_config"
 
 export async function main(ns: NS) {
 	if (ns.getHostname() !== HOME_HOST) {

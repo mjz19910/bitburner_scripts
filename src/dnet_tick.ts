@@ -8,9 +8,23 @@
  * - Sends tasks to persistent workers
  */
 
-import { EdgeReport, Topology, AuthCandidate, ExpansionCandidate, WorkAssignment } from "./types";
-import { EDGE_REPORTS_FILE, TOPOLOGY_FILE, AUTH_PLAN_FILE, PLAN_FILE, WORKER_PORT, HOME_HOST, AUTO_TICK_PORT } from "./constants";
-import { getOrchTimestamp } from "./utils";
+import {
+	AuthCandidate,
+	EdgeReport,
+	ExpansionCandidate,
+	Topology,
+	WorkAssignment,
+} from "./dnet_types";
+import {
+	AUTH_PLAN_FILE,
+	AUTO_TICK_PORT,
+	EDGE_REPORTS_FILE,
+	HOME_HOST,
+	PLAN_FILE,
+	TOPOLOGY_FILE,
+	WORKER_PORT,
+} from "./dnet_config";
+import { NS } from "@ns";
 
 export async function main(ns: NS) {
 	ns.disableLog("ALL");
@@ -31,13 +45,15 @@ export async function main(ns: NS) {
  * Run one tick of the crawler
  */
 async function runTick(ns: NS) {
-	const timestamp = getOrchTimestamp(ns);
-	ns.print(`[tick] running tick at ${timestamp}ms since orchestrator start`);
+	const timestamp = Date.now();
+	ns.print(`[tick] running tick at ${timestamp}`);
 
 	// 1️⃣ Load edge reports
 	let edgeReports: Record<string, Record<string, EdgeReport>> = {};
 	if (ns.fileExists(EDGE_REPORTS_FILE, HOME_HOST)) {
-		edgeReports = JSON.parse(ns.read(EDGE_REPORTS_FILE)) as typeof edgeReports;
+		edgeReports = JSON.parse(
+			ns.read(EDGE_REPORTS_FILE),
+		) as typeof edgeReports;
 	}
 
 	// 2️⃣ Build topology
@@ -57,7 +73,7 @@ async function runTick(ns: NS) {
 		const task: WorkAssignment = {
 			taskId: timestamp + Math.floor(Math.random() * 1000),
 			target: candidate.target,
-			sourceChain: candidate.sourceChain
+			sourceChain: candidate.sourceChain,
 		};
 		ns.tryWritePort(WORKER_PORT, JSON.stringify(task));
 		ns.print(`[tick] sent task ${task.taskId} target=${task.target}`);
@@ -67,7 +83,9 @@ async function runTick(ns: NS) {
 }
 
 /** Build topology from edgeReports */
-function buildTopology(edgeReports: Record<string, Record<string, EdgeReport>>): Topology {
+function buildTopology(
+	edgeReports: Record<string, Record<string, EdgeReport>>,
+): Topology {
 	const topology: Topology = {
 		edgeReports,
 		edges: {},
@@ -79,11 +97,17 @@ function buildTopology(edgeReports: Record<string, Record<string, EdgeReport>>):
 	for (const source in edgeReports) {
 		topology.edges[source] = Object.keys(edgeReports[source]);
 		for (const target of Object.keys(edgeReports[source])) {
-			if (!topology.reverseEdges[target]) topology.reverseEdges[target] = [];
+			if (!topology.reverseEdges[target]) {
+				topology.reverseEdges[target] = [];
+			}
 			topology.reverseEdges[target].push(source);
 
-			if (!topology.knownHosts.includes(source)) topology.knownHosts.push(source);
-			if (!topology.knownHosts.includes(target)) topology.knownHosts.push(target);
+			if (!topology.knownHosts.includes(source)) {
+				topology.knownHosts.push(source);
+			}
+			if (!topology.knownHosts.includes(target)) {
+				topology.knownHosts.push(target);
+			}
 		}
 	}
 
@@ -96,7 +120,10 @@ function buildTopology(edgeReports: Record<string, Record<string, EdgeReport>>):
 		const neighbors = topology.edges[current] ?? [];
 		for (const n of neighbors) {
 			if (!visited.has(n)) {
-				topology.chainsFromHome[n] = [...(topology.chainsFromHome[current] ?? []), n];
+				topology.chainsFromHome[n] = [
+					...(topology.chainsFromHome[current] ?? []),
+					n,
+				];
 				visited.add(n);
 				queue.push(n);
 			}
@@ -141,7 +168,8 @@ function buildAuthPlan(ns: NS, topology: Topology): AuthCandidate[] {
 			target,
 			authPath: [...sourceChain, bestSource],
 			requiresDirectAuth,
-			reason: `connected=${report?.authInfo?.isConnectedToCurrentServer} session=${report?.authInfo?.hasSession}`
+			reason:
+				`connected=${report?.authInfo?.isConnectedToCurrentServer} session=${report?.authInfo?.hasSession}`,
 		});
 	}
 
@@ -180,9 +208,10 @@ function buildExpansionPlan(ns: NS, topology: Topology): ExpansionCandidate[] {
 			bestSource,
 			sourceChain,
 			deployableFromSource: true,
-			needsRouteToSource: sourceChain[sourceChain.length - 1] !== bestSource,
+			needsRouteToSource:
+				sourceChain[sourceChain.length - 1] !== bestSource,
 			score: bestScore,
-			reason: ""
+			reason: "",
 		});
 	}
 

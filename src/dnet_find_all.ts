@@ -1,3 +1,5 @@
+import { NS, ServerAuthDetails } from "@ns"
+
 const selfScript = "darknet_find_all.ts"
 export const deps = [selfScript]
 

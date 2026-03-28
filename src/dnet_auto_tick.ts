@@ -2,7 +2,7 @@
  * darknet_auto_tick.ts
  * Sends a trigger to the tick every mutation
  */
-import { AUTO_TICK_PORT } from "./constants";
+import { AUTO_TICK_PORT } from "./dnet_config";
 
 export async function main(ns: NS) {
 	ns.disableLog("ALL");

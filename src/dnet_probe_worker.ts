@@ -10,6 +10,8 @@
  *  ns.exec("darknet_probe_worker.ts", <node>, 1)
  */
 
+import { NS } from "@ns";
+
 const ORCHESTRATOR_PORT = 5;
 
 export async function main(ns: NS) {
@@ -33,12 +35,17 @@ export async function main(ns: NS) {
 			source: host,
 			target,
 			authInfo,
-			timestamp: Date.now()
+			timestamp: Date.now(),
 		};
 
-		const success = ns.tryWritePort(ORCHESTRATOR_PORT, JSON.stringify(report));
+		const success = ns.tryWritePort(
+			ORCHESTRATOR_PORT,
+			JSON.stringify(report),
+		);
 		if (!success) {
-			ns.tprint(`[${host}] Failed to send report for ${target}: port full}`);
+			ns.tprint(
+				`[${host}] Failed to send report for ${target}: port full}`,
+			);
 			continue;
 		}
 		ns.tprint(`[${host}] Report sent for ${target}`);
