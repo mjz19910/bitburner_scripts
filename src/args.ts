@@ -42,7 +42,7 @@ export function parse_script_args<T extends ArgsSpec<any, any>>(
 	// Convert flag defaults to ns.flags format
 	const flagsInput = Object.entries(flagDefaults).map(([k, v]) => [k, v]) as [
 		string,
-		ScriptArgPrimitive,
+		ScriptArg,
 	][];
 
 	const parsed = ns.flags(flagsInput);
