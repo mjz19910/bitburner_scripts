@@ -1,10 +1,10 @@
 {
-  "name": "viteburner-template",
+  "name": "scripts",
   "version": "0.0.0",
   "scripts": {
     "dev": "viteburner"
   },
-  "author": "Tanimodori",
+  "author": "mjz19910",
   "devDependencies": {
     "@types/node": "^18.15.3",
     "@typescript-eslint/eslint-plugin": "^8.57.2",
