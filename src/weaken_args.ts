@@ -1,32 +1,28 @@
-import { isMsgWithType, hasNumberKeys, hasStringKeys } from "helpers/guard.ts"
-import { Tag } from "helpers"
-import { ScriptArgSpec } from "helpers/args"
+import { hasNumberKeys, hasStringKeys, isMsgWithType } from "./guard";
+import { Tag } from "./helpers";
 
-type WeakenSeqArgs = [
-	runner: Tag<"runner", string>,
-	threads: Tag<"threads", number>,
-	target: Tag<"target", string>
-]
-
-type WeakenOptArgs = {
-	port: number
-	help: boolean
-}
-
-export type WeakenArgs = ScriptArgSpec<WeakenSeqArgs, WeakenOptArgs>
+export type WeakenArgs = {
+	_: [
+		runner: Tag<"runner", string>,
+		threads: Tag<"threads", number>,
+		target: Tag<"target", string>,
+	];
+	port: number;
+	help: boolean;
+};
 
 export type WeakenReply = {
-	type: "weaken"
+	type: "weaken";
 	runner: string;
 	threads: number;
 	target: string;
-	securityReduction: number
-}
+	securityReduction: number;
+};
 
 export function parseWeakenReply(obj: unknown): WeakenReply | null {
 	return isMsgWithType(obj, "weaken") &&
-		hasStringKeys(obj, "runner", "target") &&
-		hasNumberKeys(obj, "threads", "securityReduction")
+			hasStringKeys(obj, "runner", "target") &&
+			hasNumberKeys(obj, "threads", "securityReduction")
 		? obj
-		: null
+		: null;
 }

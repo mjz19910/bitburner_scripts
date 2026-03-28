@@ -3,28 +3,21 @@ import { NS, ScriptArg } from "@ns";
 export type ArgsSpec<Seq, Opts> = { _: Seq } & Opts;
 export type ArgsSpec2<Seq, Opts> = { _: Seq } & { [x: string]: Opts };
 
-export function build_script_args<T extends ArgsSpec2<ScriptArg[], ScriptArg>>(
+export function build_script_args<
+	T extends { _: any[]; [x: string]: any },
+>(
 	args: T,
+	defaultValues: { [x: string]: any },
 ): ScriptArg[] {
-	const out: ScriptArg[] = [];
-	const { _: seq_args, ...args2 } = args;
-
-	for (const arg of seq_args) {
-		out.push(arg);
-	}
-
-	for (const [key, value] of Object.entries(args2)) {
+	for (const [key, value] of Object.entries(args)) {
 		if (key === "_") continue;
 		if (value === undefined) continue;
 		if (value === false) continue;
-
-		out.push(`--${key}`);
-		if (value !== true) {
-			out.push(value as ScriptArg);
-		}
+		if (defaultValues[key] === value) continue;
+		args._.push(`--${key}`);
+		if (value !== true) args._.push(value);
 	}
-
-	return out;
+	return args._;
 }
 
 export function omit_default<T>(value: T, defaultValue: T): T | undefined {

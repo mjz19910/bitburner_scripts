@@ -6,41 +6,8 @@ export function add_tag<T extends string, U>(_tag: T, value: U): Tag<T, U> {
 	return value as Tag<T, U>;
 }
 
-type ScriptArgsShape = {
-	[x: string]: ScriptArg | ScriptArg[];
-	_: ScriptArg[];
-};
-
 export function omit_default<T>(value: T, defaultValue: T): T | undefined {
 	return value === defaultValue ? undefined : value;
-}
-
-export function build_script_args<T extends ScriptArgsShape>(
-	args: T,
-): ScriptArg[] {
-	const out: ScriptArg[] = [];
-
-	// positional args first
-	for (const arg of args._) {
-		out.push(arg);
-	}
-
-	// named flags after
-	for (const [key, value] of Object.entries(args)) {
-		if (key === "_") continue;
-		if (value === undefined) continue;
-		if (value === false) continue;
-
-		out.push(`--${key}`);
-
-		// booleans become presence flags only
-		if (value !== true) {
-			if (typeof value == "object") throw new Error("Invalid state");
-			out.push(value);
-		}
-	}
-
-	return out;
 }
 
 export function mergeSequencesInPlace(parts: string[][], minOverlap = 4) {

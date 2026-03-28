@@ -1,5 +1,6 @@
-import { parse_script_args } from "helpers/args"
-import { WeakenArgs } from "helpers/weaken_args"
+import { AutocompleteData, NS } from "@ns"
+import { parse_script_args } from "./args"
+import { WeakenArgs } from "./weaken_args"
 
 /** tmp/weaken.ts
  * Weaken a target server, posting security reduction to a port.
