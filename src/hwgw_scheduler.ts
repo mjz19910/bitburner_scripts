@@ -1,4 +1,5 @@
-import { isNormalServer } from "helpers"
+import { NS, Server } from "@ns"
+import { isNormalServer } from "./helpers"
 
 interface RunnerState {
 	target: string

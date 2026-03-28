@@ -1,5 +1,6 @@
 aevum
 avmnite-02h
+brutessh
 clarkinc
 CompuTek
 CSec
@@ -13,6 +14,7 @@ fulcrumassets
 fulcrumtech
 heartbleed
 httpworm
+hwgw
 joesguns
 lexo-corp
 megacorp
@@ -25,6 +27,7 @@ omnitek
 relaysmtp
 run4theh111z
 sessioned
+sqlinject
 syscore
 tprint
 viteburner
