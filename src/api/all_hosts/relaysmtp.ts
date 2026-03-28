@@ -1,39 +1,50 @@
-import { HostsDatabase } from "types/HostsDatabase"
+import { HostInfoDB } from "@/HostInfoDB";
+import { NS } from "@ns";
 
 // api/all_hosts/relaysmtp.ts
 export async function main(ns: NS) {
-	const db = new HostsDatabase(ns)
+	const db = new HostInfoDB(ns);
 
-	for (const info of db.data.hosts) {
-		if (!info.server_info) {
-			ns.tprint("skip relaysmtp for ", info.host, " no server_info")
-			break
-		}
+	for (const info of db.iter_servers()) {
+		const srv = info.server;
 
-		const srv = info.server_info
+		if (srv.openPortCount === void 0) continue;
+		if (srv.numOpenPortsRequired === void 0) continue;
+		if (srv.numOpenPortsRequired < 3) continue;
+		if (srv.smtpPortOpen) continue;
 
-		if (srv.openPortCount === void 0) continue
-		if (srv.numOpenPortsRequired === void 0) continue
-		if (srv.numOpenPortsRequired < 3) continue
-		if (srv.smtpPortOpen) continue
+		const host = srv.hostname;
+		if (ns.relaysmtp(host)) {
+			ns.tprint(
+				"key update smtpPortOpen ",
+				host,
+				" value ",
+				true,
+				" old ",
+				srv.smtpPortOpen,
+			);
 
-		if (ns.relaysmtp(info.host)) {
-			ns.tprint("key update smtpPortOpen ", info.host, " value ", true, " old ", srv.smtpPortOpen)
+			srv.smtpPortOpen = true;
 
-			srv.smtpPortOpen = true
+			const prev_opc = srv.openPortCount;
+			srv.openPortCount += 1;
 
-			const prev_opc = srv.openPortCount
-			srv.openPortCount += 1
+			ns.tprint(
+				"key update openPortCount ",
+				host,
+				" value ",
+				srv.openPortCount,
+				" old ",
+				prev_opc,
+			);
 
-			ns.tprint("key update openPortCount ", info.host, " value ", srv.openPortCount, " old ", prev_opc)
-
-			db.notify_changed()
+			db.notify_changed();
 		} else {
-			ns.tprint("error relaysmtp for ", info.host)
+			ns.tprint("error relaysmtp for ", host);
 		}
 	}
 
 	if (db.was_content_modified) {
-		db.save()
+		db.save();
 	}
 }

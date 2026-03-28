@@ -1,42 +1,54 @@
-import { HostInfo, HostsDatabase } from "types/HostsDatabase"
+import { NS } from "@ns";
+import { HostInfo, HostInfoDB } from "./HostInfoDB";
+
 function set_key<U, K extends keyof U>(base: U, updated: U, k: K): U[K] {
-	return base[k] = updated[k]
+	return base[k] = updated[k];
 }
+
 export async function main(ns: NS) {
 	if (ns.args.length > 0) {
-		ns.tprint("provide no arguments to get_server.ts")
-		return
+		ns.tprint("provide no arguments to get_server.ts");
+		return;
 	}
-	const db: HostsDatabase = new HostsDatabase(ns)
-	db.populate_index()
-	const info_arr: HostInfo[] = db.data.hosts
+	const db: HostInfoDB = new HostInfoDB(ns);
+	const info_arr = db.data;
 	for (const info of info_arr) {
-		const hostname = info.host
-		const new_info = ns.getServer(hostname)
-		if ("depth" in new_info) continue
+		const hostname = info.server.hostname;
+		const new_info = ns.getServer(hostname);
+		if ("depth" in new_info) continue;
 		if (hostname === "home") {
-			new_info.ramUsed -= 1.6
-			new_info.ramUsed -= 2
+			new_info.ramUsed -= 1.6;
+			new_info.ramUsed -= 2;
 		}
 		if (info.server === void 0 || info.server === null) {
-			info.server = new_info
-			db.notify_changed()
-			continue
+			info.server = new_info;
+			db.notify_changed();
+			continue;
 		}
-		new_info.ramUsed = Math.round(new_info.ramUsed * 100) / 100
+		new_info.ramUsed = Math.round(new_info.ramUsed * 100) / 100;
 		if (new_info.moneyAvailable !== void 0) {
-			new_info.moneyAvailable = Math.round(new_info.moneyAvailable)
+			new_info.moneyAvailable = Math.round(new_info.moneyAvailable);
 		}
+		type ServerType = typeof info.server;
 		for (const key in new_info) {
-			const kt: keyof Server = key as keyof Server;
+			const kt = key as keyof ServerType;
 			if (new_info[kt] !== info.server[kt]) {
-				ns.tprint("key update ", key, " ", hostname, " value ", new_info[kt], " old ", info.server_info[kt])
-				set_key(info.server, new_info, kt)
-				db.notify_changed()
+				ns.tprint(
+					"key update ",
+					key,
+					" ",
+					hostname,
+					" value ",
+					new_info[kt],
+					" old ",
+					info.server[kt],
+				);
+				set_key(info.server, new_info, kt);
+				db.notify_changed();
 			}
 		}
 	}
 	if (db.was_content_modified) {
-		db.save()
+		db.save();
 	}
 }

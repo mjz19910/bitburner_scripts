@@ -1,23 +1,39 @@
-import { HostsDatabase } from "types/HostsDatabase"
+import { HostInfoDB } from "@/HostInfoDB";
+import { NS } from "@ns";
 export async function main(ns: NS) {
-	const db = new HostsDatabase(ns)
-	for (const info of db.data.hosts) {
-		const srv = info.server_info
-		if (srv === null) continue
-		if (srv.openPortCount === void 0) continue
-		if (srv.numOpenPortsRequired === void 0) continue
-		if (srv.numOpenPortsRequired < 2) continue
-		if (srv.ftpPortOpen) continue
-		if (ns.ftpcrack(info.host)) {
-			ns.tprint("key update ftpPortOpen ", info.host, " value ", true, " old ", srv.ftpPortOpen)
-			srv.ftpPortOpen = true
-			const prev_opc = srv.openPortCount
-			srv.openPortCount += 1
-			ns.tprint("key update openPortCount ", info.host, " value ", srv.openPortCount, " old ", prev_opc)
-			db.notify_changed()
+	const db = new HostInfoDB(ns);
+	for (const info of db.data) {
+		const srv = info.server;
+		if (srv === null) continue;
+		if ("openPortCount" in srv === false) continue;
+		if (srv.openPortCount === void 0) continue;
+		if (srv.numOpenPortsRequired === void 0) continue;
+		if (srv.numOpenPortsRequired < 2) continue;
+		if (srv.ftpPortOpen) continue;
+		if (ns.ftpcrack(info.server.hostname)) {
+			ns.tprint(
+				"key update ftpPortOpen ",
+				info.server.hostname,
+				" value ",
+				true,
+				" old ",
+				srv.ftpPortOpen,
+			);
+			srv.ftpPortOpen = true;
+			const prev_opc = srv.openPortCount;
+			srv.openPortCount += 1;
+			ns.tprint(
+				"key update openPortCount ",
+				info.server.hostname,
+				" value ",
+				srv.openPortCount,
+				" old ",
+				prev_opc,
+			);
+			db.notify_changed();
 		} else {
-			ns.tprint("error ftpcrack for ", info.host)
+			ns.tprint("error ftpcrack for ", info.server.hostname);
 		}
 	}
-	if (db.was_content_modified) db.save()
+	if (db.was_content_modified) db.save();
 }

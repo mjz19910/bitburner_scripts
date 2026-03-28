@@ -1,6 +1,4 @@
-import { DarknetServerData, ScriptArg, Server } from "@ns";
-
-export type Tag<T, U> = U & { _tag: T };
+import { DarknetServerData, Server } from "@ns";
 
 export function add_tag<T extends string, U>(_tag: T, value: U): Tag<T, U> {
 	return value as Tag<T, U>;
@@ -77,14 +75,10 @@ export function some_opt<T>(value: T): { type: "some"; value: T } {
 	return { type: "some", value };
 }
 
-export function isNormalServer(
-	s: Server | (DarknetServerData & { isOnline: boolean }),
-): s is Server {
-	return "moneyMax" in s;
+export function isNormalServer(s: Server | DarknetServer): s is Server {
+	return !("isOnline" in s);
 }
 
-export type Compute<T> =
-	& {
-		[K in keyof T]: T[K];
-	}
-	& {};
+export type Tag<T, U> = U & { _tag: T };
+export type Compute<T> = { [K in keyof T]: T[K] } & {};
+export type DarknetServer = Compute<{ isOnline: boolean } & DarknetServerData>;

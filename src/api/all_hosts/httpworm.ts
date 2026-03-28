@@ -1,36 +1,50 @@
-import { HostsDatabase } from "types/HostsDatabase"
+import { HostInfoDB } from "@/HostInfoDB";
+import { NS } from "@ns";
 
-// api/all_hosts/relaysmtp.ts
+// api/all_hosts/httpworm.ts
 export async function main(ns: NS) {
-	const db = new HostsDatabase(ns)
+	const db = new HostInfoDB(ns);
 
-	for (const info of db.data.hosts) {
-		if (!info.server_info) continue
+	for (const info of db.data) {
+		const srv = info.server;
+		if (!srv) continue;
+		if (!("openPortCount" in srv)) continue;
+		if (srv.openPortCount === void 0) continue;
+		if (srv.numOpenPortsRequired === void 0) continue;
+		if (srv.numOpenPortsRequired < 4) continue;
+		if (srv.httpPortOpen) continue;
+		const { hostname: host } = srv;
+		if (ns.httpworm(host)) {
+			ns.tprint(
+				"key update httpPortOpen ",
+				host,
+				" value ",
+				true,
+				" old ",
+				srv.smtpPortOpen,
+			);
 
-		const srv = info.server_info
+			srv.httpPortOpen = true;
 
-		if (srv.openPortCount === void 0) continue
-		if (srv.numOpenPortsRequired === void 0) continue
-		if (srv.numOpenPortsRequired < 4) continue
-		if (srv.httpPortOpen) continue
+			const prev_opc = srv.openPortCount;
+			srv.openPortCount += 1;
 
-		if (ns.httpworm(info.host)) {
-			ns.tprint("key update httpPortOpen ", info.host, " value ", true, " old ", srv.smtpPortOpen)
+			ns.tprint(
+				"key update openPortCount ",
+				host,
+				" value ",
+				srv.openPortCount,
+				" old ",
+				prev_opc,
+			);
 
-			srv.httpPortOpen = true
-
-			const prev_opc = srv.openPortCount
-			srv.openPortCount += 1
-
-			ns.tprint("key update openPortCount ", info.host, " value ", srv.openPortCount, " old ", prev_opc)
-
-			db.notify_changed()
+			db.notify_changed();
 		} else {
-			ns.tprint("error httpworm for ", info.host)
+			ns.tprint("error httpworm for ", host);
 		}
 	}
 
 	if (db.was_content_modified) {
-		db.save()
+		db.save();
 	}
 }
