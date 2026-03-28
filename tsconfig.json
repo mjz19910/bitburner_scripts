@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "nodenext",
     "target": "esnext",
     "lib": [ "ESNext", "DOM", "DOM.Iterable" ],
     "types": [ "vite/client" ],
@@ -9,9 +9,8 @@
     "noEmit": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
     "inlineSourceMap": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "paths": {
