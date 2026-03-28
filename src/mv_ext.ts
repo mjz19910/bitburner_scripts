@@ -1,4 +1,4 @@
-import { mvExtended } from "./types/mv.ts"
+import { mvExtended } from "./mv.js"
 
 export async function main(ns: NS) {
 	// Parse arguments from command line

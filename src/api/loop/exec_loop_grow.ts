@@ -1,5 +1,5 @@
-import { HostsDatabase } from "types/HostsDatabase"
-import { exec } from "types/api/exec"
+import { HostsDatabase } from "@/HostsDatabase"
+import { exec } from "@/exec"
 const RUN_PATH = "api/loop/grow.ts"
 export async function main(ns: NS) {
 	const runner = "lit"

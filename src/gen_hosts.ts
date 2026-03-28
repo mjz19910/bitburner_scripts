@@ -1,7 +1,7 @@
 /** scan.ts */
 import { AutocompleteData, NS, Server } from "@ns";
-import { DarknetServer } from "../type_helpers";
-import { HostInfoDB } from "../db/HostInfoDB";
+import { DarknetServer } from "./type_helpers";
+import { HostInfoDB } from "./HostInfoDB";
 
 class ScanContext<T extends { hostname: string }> {
 	queue: string[] = [];

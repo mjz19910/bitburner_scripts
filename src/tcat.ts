@@ -1,4 +1,4 @@
-import { read_string_arg } from "./types/arg_parse";
+import { read_string_arg } from "./arg_parse";
 
 export async function main(ns: NS) {
 	if (ns.args.length < 1) {
