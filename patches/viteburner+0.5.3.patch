@@ -1,0 +1,14 @@
+diff --git a/node_modules/viteburner/dist/cli-e612352a.mjs b/node_modules/viteburner/dist/cli-e612352a.mjs
+index 46f4781..d916d94 100644
+--- a/node_modules/viteburner/dist/cli-e612352a.mjs
++++ b/node_modules/viteburner/dist/cli-e612352a.mjs
+@@ -17,7 +17,8 @@ import { resolve as resolve$1 } from "pathe";
+ import fg from "fast-glob";
+ import { parse as parse$1 } from "acorn";
+ import MagicString from "magic-string";
+-import { isMatch, match } from "micromatch";
++import micromatch from "micromatch";
++const { isMatch, match } = micromatch;
+ import { WebSocketServer, WebSocket } from "ws";
+ import { z } from "zod";
+ import chokidar from "chokidar";
