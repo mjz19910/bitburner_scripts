@@ -1,13 +1,16 @@
-import { HostsDatabase } from "types/HostsDatabase"
+import { isNormalServer } from "@/helpers"
+import { HostInfoDB } from "@/HostInfoDB"
+import { NS, Server } from "@ns"
 
 export async function main(ns: NS) {
-	const db = new HostsDatabase(ns)
-	for (const info of db.data.hosts) {
-		const srv = info.server_info
+	const db = new HostInfoDB(ns)
+	for (const info of db.data) {
+		const srv = info.server
 		if (!srv) {
 			ns.tprint("skip brutessh for ", info.host, " no server_info")
 			continue
 		}
+		if(!isNormalServer(srv)) continue
 		if (srv.openPortCount === void 0) continue
 		if (srv.numOpenPortsRequired === void 0) continue
 		if (srv.numOpenPortsRequired < 1) continue

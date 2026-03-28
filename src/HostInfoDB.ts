@@ -1,3 +1,4 @@
+import { NS, Server } from "@ns"
 import { DarknetServerData2 } from "./db_type_helpers"
 
 export type HostInfo<T = Server | DarknetServerData2> = {

@@ -1,19 +1,19 @@
-import { isMsgWithType, hasNumberKeys, hasStringKeys } from "helpers/guard.ts"
-import { Tag } from "helpers"
-import { ScriptArgSpec } from "helpers/args"
+import { hasNumberKeys, hasStringKeys, isMsgWithType } from "./guard";
+import { Tag } from "./helpers";
+import { ArgsSpec } from "./args";
 
 export type GrowSeqArgs = [
 	runner: Tag<"runner", string>,
 	threads: Tag<"threads", number>,
-	target: Tag<"target", string>
-]
+	target: Tag<"target", string>,
+];
 
 export type GrowOptArgs = {
-	port: number
-	help: boolean
-}
+	port: number;
+	help: boolean;
+};
 
-export type GrowArgs = ScriptArgSpec<GrowSeqArgs, GrowOptArgs>
+export type GrowArgs = ArgsSpec<GrowSeqArgs, GrowOptArgs>;
 
 export type GrowReply = {
 	type: "grow";
@@ -21,12 +21,12 @@ export type GrowReply = {
 	threads: number;
 	target: string;
 	growthFactor: number;
-}
+};
 
 export function parseGrowReply(obj: unknown): GrowReply | null {
 	return isMsgWithType(obj, "grow") &&
-		hasStringKeys(obj, "runner", "target") &&
-		hasNumberKeys(obj, "threads", "growthFactor")
+			hasStringKeys(obj, "runner", "target") &&
+			hasNumberKeys(obj, "threads", "growthFactor")
 		? obj
-		: null
+		: null;
 }
