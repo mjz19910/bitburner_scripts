@@ -1,3 +1,5 @@
+import { NS } from "@ns";
+
 /**
  * darknet_crawler.ts
  *
@@ -10,7 +12,11 @@ const SELF_SCRIPT = "darknet_crawler.ts";
 export const deps = [SELF_SCRIPT];
 
 export const static_known_passwords = [
-	"admin", "password", "0000", "12345", ""
+	"admin",
+	"password",
+	"0000",
+	"12345",
+	"",
 ];
 
 const seenFile = "/tmp/darknet_seen.txt";
@@ -24,7 +30,9 @@ export async function main(ns: NS) {
 	const host = ns.getHostname();
 
 	if (host === "home") {
-		ns.tprint("[home] Crawler should be launched on a darknet node, not home.");
+		ns.tprint(
+			"[home] Crawler should be launched on a darknet node, not home.",
+		);
 		return;
 	}
 
@@ -54,11 +62,15 @@ export async function main(ns: NS) {
 
 		// Get auth hints
 		let authInfo = ns.dnet.getServerAuthDetails(target);
-		ns.tprint(`[${host}] ${target} auth info: ${JSON.stringify(authInfo, void 0, 2)}`);
-		const { modelId } = authInfo
+		ns.tprint(
+			`[${host}] ${target} auth info: ${
+				JSON.stringify(authInfo, void 0, 2)
+			}`,
+		);
+		const { modelId } = authInfo;
 		if (!model_ids.has(modelId as (typeof model_ids_ro)[number])) {
-			ns.tprint(`[${host}] ${target} new modelId=`, modelId)
-			break
+			ns.tprint(`[${host}] ${target} new modelId=`, modelId);
+			break;
 		}
 
 		if (authInfo.modelId === "") {
@@ -66,7 +78,7 @@ export async function main(ns: NS) {
 
 		// Build candidate passwords from hints + static list
 		const candidates = [
-			...static_known_passwords
+			...static_known_passwords,
 		];
 
 		// Try authenticate
@@ -82,8 +94,12 @@ export async function main(ns: NS) {
 			} catch {
 				try {
 					const hb = await ns.dnet.heartbleed(target);
-					ns.print(`[${host}] heartbleed(${target}) logs:\n${hb.logs.join("\n")}`);
-				} catch { }
+					ns.print(
+						`[${host}] heartbleed(${target}) logs:\n${
+							hb.logs.join("\n")
+						}`,
+					);
+				} catch {}
 			}
 		}
 		if (!password) {
@@ -96,7 +112,11 @@ export async function main(ns: NS) {
 		try {
 			const connResult = ns.dnet.connectToSession(target, password);
 			connected = !!(connResult && (connResult.success ?? false));
-			ns.print(`[${host}] connectToSession(${target}) => ${JSON.stringify(connResult)}`);
+			ns.print(
+				`[${host}] connectToSession(${target}) => ${
+					JSON.stringify(connResult)
+				}`,
+			);
 		} catch {
 			connected = false;
 		}
@@ -117,7 +137,7 @@ export async function main(ns: NS) {
 			target,
 			authInfo,
 			password: password ?? null,
-			timestamp: Date.now()
+			timestamp: Date.now(),
 		};
 		ns.tryWritePort(ORCHESTRATOR_PORT, JSON.stringify(report));
 
@@ -128,7 +148,7 @@ export async function main(ns: NS) {
 function alreadySeen(ns: NS, target: string): boolean {
 	if (!ns.fileExists(seenFile, "home")) return false;
 	const content = ns.read(seenFile);
-	return content.split("\n").map(s => s.trim()).includes(target);
+	return content.split("\n").map((s) => s.trim()).includes(target);
 }
 
 function markSeen(ns: NS, target: string) {

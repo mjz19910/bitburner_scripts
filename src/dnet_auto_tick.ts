@@ -2,6 +2,7 @@
  * darknet_auto_tick.ts
  * Sends a trigger to the tick every mutation
  */
+import { NS } from "@ns";
 import { AUTO_TICK_PORT } from "./dnet_config";
 
 export async function main(ns: NS) {
@@ -13,9 +14,12 @@ export async function main(ns: NS) {
 		await ns.dnet.nextMutation();
 
 		ns.print("[auto_tick] mutation occurred, sending tick trigger");
-		ns.tryWritePort(AUTO_TICK_PORT, JSON.stringify({
-			source: "auto_tick",
-			timestamp: Date.now()
-		}));
+		ns.tryWritePort(
+			AUTO_TICK_PORT,
+			JSON.stringify({
+				source: "auto_tick",
+				timestamp: Date.now(),
+			}),
+		);
 	}
 }
