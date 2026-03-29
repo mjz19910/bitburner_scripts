@@ -1,5 +1,6 @@
 aevum
 avmnite-02h
+bitburner
 brutessh
 clarkinc
 CompuTek
@@ -8,6 +9,7 @@ Darkscape
 darkweb
 deltaone
 dnet
+filesync
 foodnstuff
 ftpcrack
 fulcrumassets
