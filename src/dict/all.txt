@@ -84,6 +84,7 @@ Prereq
 primarydark
 primarylight
 relaysmtp
+rootable
 run4theh111z
 savegame
 secondarydark

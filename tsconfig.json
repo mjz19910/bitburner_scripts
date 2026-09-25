@@ -19,5 +19,5 @@
       "@ns": [ "./NetscriptDefinitions.d.ts" ]
     }
   },
-  "include": [ "src/**/*.ts", "src/**/*.js", "NetscriptDefinitions.d.ts", "vite.config.ts", "vite.config.js" ]
+  "include": [ "src/**/*.ts", "src/**/*.js", "src2/**/*.ts", "NetscriptDefinitions.d.ts", "vite.config.ts", "vite.config.js" ]
 }
