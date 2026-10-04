@@ -1,7 +1,7 @@
-import { NS as _NS, NetscriptPort as _NetscriptPort, DarknetResult as _DarknetResult } from "@ns"
+import * as ns from "@ns"
 
 declare global {
-	type NS = _NS
-	type NetscriptPort = _NetscriptPort
-	type DarknetResult = _DarknetResult
+	type NS = ns.NS
+	type NetscriptPort = ns.NetscriptPort
+	type DarknetResult = ns.DarknetResult
 }
