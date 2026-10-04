@@ -20,6 +20,7 @@ clarkinc
 codingcontract
 CompuTek
 CSec
+Cuore
 Cybers
 Darkscape
 darkweb
@@ -59,6 +60,7 @@ killall
 Kuai
 labradar
 labreport
+Laika
 levelable
 Lexo
 lexo-corp
