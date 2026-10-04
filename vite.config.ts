@@ -1,6 +1,6 @@
 /* eslint-env node */
-import { defineConfig } from 'viteburner';
-import { resolve } from 'path';
+import { defineConfig } from 'viteburner'
+import { resolve } from 'path'
 
 export default defineConfig({
 	resolve: {
@@ -22,4 +22,4 @@ export default defineConfig({
 		],
 		sourcemap: 'inline',
 	},
-});
+})
